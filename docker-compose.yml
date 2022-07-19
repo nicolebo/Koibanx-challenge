@@ -1,0 +1,42 @@
+version: '3.9'
+x-common: &common
+  restart: unless-stopped
+  tty: true
+services:
+  koi-api:
+    <<: *common
+    container_name: backend-challenge
+    restart: always
+    build: .
+    ports:
+      - ${PORT}:3000
+    networks:
+      koibanx_network:
+        aliases:
+          - koi-api
+        ipv4_address: 172.255.254.200
+    volumes:
+      - .:/usr/src/app
+  mongo:
+    <<: *common
+    image: mongo:5.0-focal
+    environment:
+      MONGO_INITDB_DATABASE: ${DATABASE_DBNAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    networks:
+      koibanx_network:
+        aliases:
+          - mongo
+        ipv4_address: 172.255.254.103
+    volumes:
+      - $PWD/.data/mongodb:/data/db:delegated
+networks:
+  koibanx_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.255.254.0/24
