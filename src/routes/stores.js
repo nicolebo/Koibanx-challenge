@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { authenticate } = require("../utils/middlewares/auth");
 const { createStoreSchema } = require("../utils/middlewares/stores.validator");
-const { createStore } = require("../controllers/store.controller");
+const { createStore, getStores } = require("../controllers/store.controller");
 
 router.route('/stores')
   .get(authenticate)

@@ -7,7 +7,15 @@ const insertStore = async (store) => {
     }
     return null;
 };
+const listStores = async (page, limit) => {
+    const options = {
+        page: page,
+        limit: limit,
+    };
+    return storeModel.paginate({}, options)
+}
 
 module.exports = {
     insertStore,
+    listStores
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const StoreSchema = new mongoose.Schema({
   name: String,
@@ -9,6 +10,7 @@ const StoreSchema = new mongoose.Schema({
   lastSale: Date,
 },{ timestamps: true });
 
+mySchema.plugin(mongoosePaginate);
 StoreSchema.pre('save', async function (callback) {
   //completar de ser necesario
 });
