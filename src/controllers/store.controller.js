@@ -18,7 +18,7 @@ const createStore = async (req, res) => {
 const getStores = async (req, res) => {
     try {
         const { page, limit } = req.query;
-        const stores = await listStores(parseInt(page), parseInt(limit));
+        const stores = await listStores(page, limit);
         res.json(stores);
     } catch (error) {
         logger.error(error.message);

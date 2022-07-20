@@ -4,8 +4,8 @@ const {validateStoresError} = require("../errors/errors");
 
 function getStoreSchema(req, res, next) {
     const schema = Joi.object({
-        page: Joi.number().required(),
-        limit: Joi.number().required()
+        page: Joi.number().min(1).required(),
+        limit: Joi.number().min(1).required()
     });
     validateRequest(req.query, next, schema);
 }
