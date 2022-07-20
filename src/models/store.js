@@ -10,7 +10,7 @@ const StoreSchema = new mongoose.Schema({
   lastSale: Date,
 },{ timestamps: true });
 
-mySchema.plugin(mongoosePaginate);
+StoreSchema.plugin(mongoosePaginate);
 StoreSchema.pre('save', async function (callback) {
   //completar de ser necesario
 });

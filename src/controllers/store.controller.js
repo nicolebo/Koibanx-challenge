@@ -1,14 +1,14 @@
 const { insertStore, listStores } = require("../repository/store.repository");
-const {logger} = require('../utils/logger');
-const {formatResponse} = require('../utils/formatResponse');
+const logger = require('../utils/logger');
 
 const createStore = async (req, res) => {
     try {
         const inserted = await insertStore(req.body);
         if (inserted) {
-            return res.status(200).json({ message: 'The store was created successfully' });
+            res.status(200).json({ message: 'The store was created successfully' });
+        }else {
+            res.status(500).json({ message: 'The store was not created' });
         }
-        return res.status(401).json({ message: 'Failed to insert store' });
     } catch (error) {
         logger.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -16,16 +16,13 @@ const createStore = async (req, res) => {
 };
 
 const getStores = async (req, res) => {
-    const { page, limit } = req.query;
     try {
-        const stores = await listStores(page || 1, limit || 10);
-        if (stores) {
-            return res.status(200).json(formatResponse(stores));
-        }
-        return res.status(401).json({message: 'Failed to get stores'});
+        const { page, limit } = req.query;
+        const stores = await listStores(parseInt(page), parseInt(limit));
+        res.json(stores);
     } catch (error) {
-        logger.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        logger.error(error.message);
+        res.status(500).send({message: error.message});
     }
 };
 module.exports = { createStore, getStores };

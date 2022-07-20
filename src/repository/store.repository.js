@@ -1,4 +1,5 @@
 const storeModel = require('../models/store');
+const {formatResponse} = require("../utils/formatResponse");
 
 const insertStore = async (store) => {
     const createdStore = await storeModel.create(store);
@@ -12,7 +13,14 @@ const listStores = async (page, limit) => {
         page: page,
         limit: limit,
     };
-    return storeModel.paginate({}, options)
+    const models = await storeModel.paginate({}, options);
+    return {
+        data: formatResponse(models.docs),
+        page: models.page,
+        pages: models.totalPages,
+        limit: limit,
+        total: models.totalDocs,
+    };
 }
 
 module.exports = {
