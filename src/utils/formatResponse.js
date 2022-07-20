@@ -16,7 +16,7 @@ const formatResponse = (data) => {
 
 const conceptsFormat = (data) => {
     return data.sort((a, b) => {
-       return a.number - b.number;
+       return a.concept - b.concept;
    });
 }
 

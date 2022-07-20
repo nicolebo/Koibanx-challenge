@@ -31,6 +31,10 @@ clean:
 test:
 	docker-compose -f docker-compose.yml up -d mongo && docker compose run ${IMAGE} npm test
 
+.PHONY: seed
+seed:
+	docker-compose -f docker-compose.yml up -d mongo && docker compose run ${IMAGE} npm run seed
+
 .PHONY: first
 first: dotenv build ## Creates compiler and tries to compile the project (start here)
 .PHONY: dotenv
