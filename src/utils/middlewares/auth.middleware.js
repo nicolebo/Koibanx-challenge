@@ -1,22 +1,28 @@
-const authMiddleware = require("basic-auth");
-const userService = require('../../controllers/user.controller');
-
+const auth = require("basic-auth");
+const {getUser} = require('../../controllers/user.controller');
+const {authError} = require('../../utils/errors/errors');
 const authenticate = async (req, res, next) => {
     try {
         //Authenticate the user
-        const authUser = authMiddleware(req);
+        const authUser = auth(req);
         if (!authUser) {
-            res.status(401).json({ error: 'Invalid credentials' });
+            throw new authError("Invalid credentials");
+        }
+      
+        //Check if the user exists
+        const user = await getUser(authUser.name);
+        if (!user) {
+            throw new authError("Invalid Username or Password");
         }
 
-        //Check if the user exists
-        const user = await userService.getUser(authUser.name);
-        if (!user || user.verifyPassword(authUser.password)) {
-            res.status(401).json({ error: 'Invalid Username or Password' });
+        if (user.verifyPassword(authUser.pass)) {
+            next();
+        } else {
+            throw new authError("Invalid Username or Password");
         }
-        next();
     } catch (error) {
-        next(error.msg);
+        console.log(error.msg);
+        next(error);
     }
 };
 

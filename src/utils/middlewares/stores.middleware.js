@@ -7,7 +7,8 @@ function getStoreSchema(req, res, next) {
         page: Joi.number().min(1).required(),
         limit: Joi.number().min(1).required()
     });
-    validateRequest(req.query, next, schema);
+    const query = JSON.parse(req.query.q);
+    validateRequest(query, next, schema);
 }
 
 function createStoreSchema(req, res, next) {

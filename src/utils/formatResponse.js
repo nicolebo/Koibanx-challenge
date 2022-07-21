@@ -2,13 +2,13 @@ const formatResponse = (data) => {
     const md = [];
     data.forEach((element) => {
         md.push({
-            _id: element._id,
-            Comercio: element.name,
-            CUIT: element.cuit,
-            Conceptos: conceptsFormat(element.concepts),
-            'balance actual:': balanceFormat(element.currentBalance),
-            Activo: activeFormat(element.active),
-            'ultima venta:': element.lastSale,
+            "id": element._id,
+            "comercio": element.name,
+            "cuit": element.cuit,
+            "conceptos": conceptsFormat(element.concepts),
+            'balance actual': balanceFormat(element.currentBalance),
+            "activo": activeFormat(element.active),
+            'ultima venta': element.lastSale,
         });
     });
     return md;
@@ -16,7 +16,7 @@ const formatResponse = (data) => {
 
 const conceptsFormat = (data) => {
     return data.sort((a, b) => {
-       return a.concept - b.concept;
+       return a.order - b.order;
    });
 }
 

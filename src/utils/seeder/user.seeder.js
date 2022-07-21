@@ -1,7 +1,7 @@
-const User = require('../models/user')
-const logger = require('../utils/logger')
+const User = require('../../models/user')
+const logger = require('../../utils/logger')
 
-exports.init = async function () {
+const init = async function () {
     if (await User.countDocuments({"username": "test@koibanx.com"})) {
         return
     }
@@ -13,3 +13,5 @@ exports.init = async function () {
 
     logger.info("Test User created")
 }
+
+module.exports = {init};

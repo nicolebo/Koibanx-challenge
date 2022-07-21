@@ -1,7 +1,8 @@
 const {createStoreSchema, getStoreSchema} = require("../utils/middlewares/stores.middleware");
-const {validateStoresError, authError} = require("../utils/errors/errors");
+const {validateStoresError} = require("../utils/errors/errors");
+const {formatResponse} = require("../utils/formatResponse");
 
-describe("createstore", () => {
+describe("create store", () => {
     test("of wrong attributes should throw a validation error", () => {
         const req = {
             body: {
@@ -25,12 +26,14 @@ describe("createstore", () => {
                 cuit: "20123456789",
                 concepts: [
                     {
-                        name: "concepto 1",
-                        price: 10
+                        name: "concepto tiendas",
+                        price: 10,
+                        order: 1
                     },
                     {
-                        name: "concepto 2",
-                        price: 20
+                        name: "concepto productos",
+                        price: 20,
+                        order: 2
                     }
                 ],
                 currentBalance: 100,
@@ -50,12 +53,14 @@ describe("createstore", () => {
                 cuit: "0",
                 concepts: [
                     {
-                        name: "concepto 1",
-                        price: 10
+                        name: "concepto tiendas",
+                        price: 10,
+                        order: 1
                     },
                     {
-                        name: "concepto 2",
-                        price: 20
+                        name: "concepto productos",
+                        price: 20,
+                        order: 2
                     }
                 ],
                 currentBalance: 100,
@@ -72,145 +77,55 @@ describe("createstore", () => {
 });
 
 
-describe("get store", () => {
-    test("of undefined limit and page validation should failed", () => {
-        const req = {
-            query: {}
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect limit and page format should failed", () => {
-        const req = {
-            query: {
-                limit: "",
-                page: ""
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect limit and page min value should failed", () => {
-        const req = {
-            query: {
-                limit: 0,
-                page: 0
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect limit min value should failed", () => {
-        const req = {
-            query: {
-                limit: 0,
-                page: 100
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect page format should failed", () => {
-        const req = {
-            query: {
-                limit: 100,
-                page: ""
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of correct limit and page min value and format should pass", () => {
-        const req = {
-            query: {
-                limit: 10,
-                page: 10
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).not.toThrow(
-            validateStoresError
-        );
-    });
-});
-
 //Validate user authentication
-describe("auth middleware", () => {
-    test("of undefined user and password validation should failed", () => {
-        const req = {
-            header: {}
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
+describe("formatter response", () => {
+    test("of a valid store must be the same with fields formatted", () => {
+        const store = [{
+                _id: "5e9f8f8f8f8f8f8f8f8f8f8",
+                name: "comercio 1",
+                cuit: "20123456789",
+                concepts: [
+                    {
+                        name: "Concepto productos",
+                        price: 20,
+                        order: 1
+                    },
+                    {
+                        name: "Concepto tienda",
+                        price: 10,
+                        order: 2
+                    }
+                ],
+                currentBalance: 100,
+                active: true,
+                lastSale: "2022-07-20"
+        }]
+        expect(formatResponse(store)).toStrictEqual([
+            {
+                "id":"5e9f8f8f8f8f8f8f8f8f8f8",
+                "comercio": "comercio 1",
+                "cuit": "20123456789",
+                "conceptos": [
+                    {
+                        name: "Concepto productos",
+                        price: 20,
+                        order: 1
+                    },
+                    {
+                        name: "Concepto tienda",
+                        price: 10,
+                        order: 2
+                    }
+                ],
+                "balance actual": "$100.00",
+                "activo": "Si",
+                "ultima venta": "2022-07-20"
+            }
+        ]);
     });
 
-    test("of incorrect limit and page format should failed", () => {
-        const req = {
-            query: {
-                limit: "",
-                page: ""
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect limit and page min value should failed", () => {
-        const req = {
-            query: {
-                limit: 0,
-                page: 0
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect limit min value should failed", () => {
-        const req = {
-            query: {
-                limit: 0,
-                page: 100
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of incorrect page format should failed", () => {
-        const req = {
-            query: {
-                limit: 100,
-                page: ""
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).toThrow(
-            validateStoresError
-        );
-    });
-
-    test("of correct limit and page min value and format should pass", () => {
-        const req = {
-            query: {
-                limit: 10,
-                page: 10
-            }
-        }
-        expect(() => getStoreSchema(req, null, null)).not.toThrow(
-            validateStoresError
-        );
+    test("of a null store must return empty array", () => {
+        const comercios = [];
+        expect(formatResponse(comercios)).toStrictEqual([]);
     });
 });

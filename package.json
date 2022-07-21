@@ -4,13 +4,15 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "run": "node $NODE_DEBUG_OPTION src/app.js",
-    "test": "jest",
-    "seed": "node utils/seeder/store.seeder.js"
+    "dev": "node $NODE_DEBUG_OPTION src/app.js",
+    "test": "jest --verbose --silent",
+    "seed": "node utils/seeder/store.seeder.js",
+    "swagger-autogen": "node src/swagger.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "and": "^0.0.3",
     "axios": "^0.21.0",
     "basic-auth": "^2.0.1",
     "bcrypt-nodejs": "0.0.3",
@@ -23,6 +25,8 @@
     "mongoose": "^5.13.2",
     "mongoose-paginate-v2": "^1.7.0",
     "mongoose-seed": "^0.6.0",
+    "swagger-autogen": "^2.21.5",
+    "swagger-ui-express": "^4.5.0",
     "winston": "~2.4.0"
   },
   "devDependencies": {

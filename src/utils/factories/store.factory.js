@@ -7,16 +7,19 @@ const createRandomStores = () => {
             name: faker.faker.company.companyName(),
             cuit: faker.faker.random.numeric({ min: 100000000, max: 99999999999 }),
             concepts: [{
-                concept: faker.faker.random.numeric({min: 0, max: 100}),
+                concept: faker.faker.random.word(),
                 price: faker.faker.commerce.price(),
+                order: faker.faker.random.numeric({min: 0, max: 100}),
                 },
                 {
-                    concept: faker.faker.random.numeric({min: 0, max: 100}),
+                    concept: faker.faker.random.word(),
                     price: faker.faker.commerce.price(),
+                    order: faker.faker.random.numeric({min: 0, max: 100}),
                 },
                 {
-                    concept: faker.faker.random.numeric({min: 0, max: 100}),
+                    concept: faker.faker.random.word(),
                     price: faker.faker.commerce.price(),
+                    order: faker.faker.random.numeric({min: 0, max: 100}),
                 }
                 ],
             currentBalance: faker.faker.commerce.price(),

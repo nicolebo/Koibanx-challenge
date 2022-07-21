@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const { createRandomStores } = require('../factories/store.factory');
 const config = require("config");
+
 var model = [
     {
         model: 'Store',

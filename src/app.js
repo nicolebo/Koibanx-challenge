@@ -7,10 +7,16 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv');
 dotenv.config();
-const config = require('config');
 
-mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'), { useNewUrlParser: true, useUnifiedTopology: true });
-require('./utils/initializer').init()
+// If exists uri in config file, use it, else use localhost
+const uri = process.env.DATABASE_URI;
+if(uri) {
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+} else {
+    mongoose.connect("mongodb://" +process.env.DATABASE_HOST + ':' + process.env.DATABASE_PORT+ "/" +  process.env.DATABASE_DBNAME, { useNewUrlParser: true, useUnifiedTopology: true });
+}
+
+require("./utils/seeder/user.seeder").init();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +26,7 @@ app.use('/api', require('./routes/stores'));
 app.use(errorsMiddleware);
 
 // Start the server
-app.listen(config.get('port'));
-logger.info('API initialized on port ' + config.get('port'));
+const server = app.listen(process.env.PORT);
+logger.info('API initialized on port ' + process.env.PORT);
 
-module.exports = app
+module.exports = { app, server };

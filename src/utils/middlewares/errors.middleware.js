@@ -7,6 +7,7 @@ const ERROR_HANDLERS = {
         console.error(error.name);
         console.log(error.message);
         console.log(error.stack);
+        console.log("asdasd");
         res.status(500).send("Internal server error");
     },
 };
