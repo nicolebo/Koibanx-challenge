@@ -8,7 +8,7 @@ const init = async function () {
 
     let user = new User();
     user.username = "test@koibanx.com";
-    user.password = "admin";
+    user.password = "test123";
     await User.create(user);
 
     logger.info("Test User created")
