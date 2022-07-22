@@ -1,6 +1,6 @@
 # .env
 PWD=$(CURDIR)
-ENV_FILE:=${PWD}/example.env
+ENV_FILE:=${PWD}/.env.example
 ifneq ("$(wildcard ${PWD}/.env)","")
     ENV_FILE:=${PWD}/.env
 endif
